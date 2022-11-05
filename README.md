@@ -9,3 +9,9 @@ Sau khi tìm hiểu xong thì mn lên web này đọc và tải code server vs c
 Đọc link tham khảo này trước nhé reference: https://www.geeksforgeeks.org/gui-chat-application-using-tkinter-in-python/  
 
 Sau đó nhóm mình sẽ chỉnh sửa 2 code đó nhé.
+
++ Thêm login với kiểm duyệt bằng database (xlsx)  
++ Select Chat room:  
+  + 1-1  
+  + 1-N  
++ (BONUS) user = (avatar + name)  
