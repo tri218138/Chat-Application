@@ -10,8 +10,10 @@ Sau khi tìm hiểu xong thì mn lên web này đọc và tải code server vs c
 
 Sau đó nhóm mình sẽ chỉnh sửa 2 code đó nhé.
 
+Một số tasks tui đề xuất:  
 + Thêm login với kiểm duyệt bằng database (xlsx)  
 + Select Chat room:  
   + 1-1  
   + 1-N  
++ Viết báo cáo  
 + (BONUS) user = (avatar + name)  
