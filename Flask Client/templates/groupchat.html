@@ -1,0 +1,13 @@
+<form id="chatGroup" action="/" method="post">
+    <div style="position: relative; overflow-y: scroll; height: 100vh;">
+        <div class="list-group list-group-checkable d-grid gap-2 border-0 w-auto" id="roomChat">
+            {% for gr in groups %}
+            <input class="list-group-item-check pe-none" type="radio" name="select_chatgroup" id='{{gr["id"]}}'
+                value='{{gr["id"]}}' onclick="javascript: submit()">
+            <label class="list-group-item rounded-3 py-3" for='{{gr["id"]}}'>
+                {{gr["name"]}}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+</form>

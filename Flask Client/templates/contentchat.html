@@ -1,0 +1,23 @@
+<div style="position: relative; overflow-y: scroll; height: 50vh;">
+    <ul class="list-unstyled">
+        {% if logs|length > 0 %}
+        {% for lg in logs %}
+        <li class="d-flex justify-content-between mb-4">
+            <!-- <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
+                class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60"> -->
+            <div class="card" style="width: 100%;">
+                <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">{{lg["username"]}}</p>
+                    <p class="text-muted small mb-0"><i class="far fa-clock"></i> {{lg["time"]}}</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        {{lg["content"]}}
+                    </p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+</div>
