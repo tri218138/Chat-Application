@@ -74,46 +74,58 @@ class Server:
             packet = conn.recv(1024).decode(FORMAT)
             packet = json.loads(packet)
 
-            if packet["request"] == "signin":            
-                username = packet["data"]["username"]
-                password = packet["data"]["password"]
-                sign, data = self.check_login(username, password)
-                if sign:
-                    self.online[username] = conn
-                    # 2 times send near by
-                    self.sender(data, [conn])
-                    rooms = dbms.setRoomIp(dbms.selectUserRooms(username), packet["host"])
-                    if len(rooms) > 0:
-                        print("require peer 2 peer")
-                        packet = self.require_connect(rooms)
-                        self.sender(packet, [conn])
-            # elif packet["type"] == "select":
-            #     if packet["object"] == "room":
-            #         roomid = packet["room"]['id']
-            #         username = packet["username"]
-                    # self.response_logs(roomid)
-            elif packet["request"] == "message":
-                username = packet["data"]["log"]["username"]
-                roomid = packet["data"]["roomid"]
-                newLog = packet["data"]["log"]
-                dbms.pushLog2RoomId(roomid, newLog)
-                log = dbms.getLogFromRoomId(roomid)
-
-                data = {
-                    "roomid": roomid,
-                    "log": log
-                }
-
-                resPacket = {}
-                resPacket["response"] = "message"
-                resPacket["host"] = (SERVER["IP"], SERVER["PORT"])
-                resPacket["data"] = data
-                resPacket = json.dumps(resPacket)
+            if "file" in packet:
+                print(packet["data"])
+                username = packet["author"][0]
+                roomid = packet["roomID"]
                 user_in_same_room = dbms.getUserFromRoomId(roomid)
+                print(username, roomid, user_in_same_room)
+                packet= json.dumps(packet)
                 for user in user_in_same_room:
                     if user in self.online and user != username: #not resend to owner's message
-                        self.sender(resPacket, [self.online[user]])
+                        self.sender(packet, [self.online[user]])
                         print('reback')
+            else:
+                if packet["request"] == "signin":            
+                    username = packet["data"]["username"]
+                    password = packet["data"]["password"]
+                    sign, data = self.check_login(username, password)
+                    if sign:
+                        self.online[username] = conn
+                        # 2 times send near by
+                        self.sender(data, [conn])
+                        rooms = dbms.setRoomIp(dbms.selectUserRooms(username), packet["host"])
+                        if len(rooms) > 0:
+                            print("require peer 2 peer")
+                            packet = self.require_connect(rooms)
+                            self.sender(packet, [conn])
+                # elif packet["type"] == "select":
+                #     if packet["object"] == "room":
+                #         roomid = packet["room"]['id']
+                #         username = packet["username"]
+                        # self.response_logs(roomid)
+                elif packet["request"] == "message":
+                    username = packet["data"]["log"]["username"]
+                    roomid = packet["data"]["roomid"]
+                    newLog = packet["data"]["log"]
+                    dbms.pushLog2RoomId(roomid, newLog)
+                    log = dbms.getLogFromRoomId(roomid)
+
+                    data = {
+                        "roomid": roomid,
+                        "log": log
+                    }
+
+                    resPacket = {}
+                    resPacket["response"] = "message"
+                    resPacket["host"] = (SERVER["IP"], SERVER["PORT"])
+                    resPacket["data"] = data
+                    resPacket = json.dumps(resPacket)
+                    user_in_same_room = dbms.getUserFromRoomId(roomid)
+                    for user in user_in_same_room:
+                        if user in self.online and user != username: #not resend to owner's message
+                            self.sender(resPacket, [self.online[user]])
+                            print('reback')
         # except :
         #     conn.close()
     
