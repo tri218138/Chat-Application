@@ -2,11 +2,17 @@ from flask import request
 from flask import Flask, render_template, jsonify, get_template_attribute, make_response,redirect
 from flask import abort
 from flask import session, url_for
+# from werkzeug import secure_filename
 # import numpy as np
 import json
 import time
 from python.client import Client
 import copy
+import os
+
+def getpath(digest):
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                        'static/uploads', digest)
 
 app = Flask(__name__)
 
@@ -22,10 +28,16 @@ def home():
             # Client.selectChatRoom(roomIDSelected)
             Client.currentRoomId[0] = roomIDSelected
             print('room select', roomIDSelected)
-        if "send_message" in postData:
-            contentMessage = postData["send_message"]
-            Client.send_message(contentMessage)
-            print('send_message', contentMessage)
+        if "send" in postData:
+            if "message" in postData:
+                contentMessage = postData["message"]
+                Client.send_message(contentMessage)
+                print('message', contentMessage)
+
+            if "file" in request.files:
+                fileMessage = request.files['file']
+                Client.send_file(fileMessage)
+            # filename = secure_filename(fileMessage.filename) 
     
     groupchat = render_template('groupchat.html', groups = Client.userRoomsData)
     sendbutton = render_template('sendbutton.html')
@@ -71,3 +83,4 @@ if __name__ == "__main__":
 
 # https://stackoverflow.com/questions/17057191/redirect-while-passing-arguments
 # https://realpython.com/python-sockets/#background
+# send file: https://werkzeug.palletsprojects.com/en/2.2.x/datastructures/#werkzeug.datastructures.FileStorage

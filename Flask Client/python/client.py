@@ -114,70 +114,96 @@ class User:
         while True:
             packet = conn.recv(1024).decode(FORMAT)
             packet = json.loads(packet) 
-            print(packet["host"])
-            if packet["host"][0] == SERVER["IP"] and packet["host"][1] ==  SERVER["PORT"]:
-                if "response" in packet:
-                    if packet["response"] == 'signin':
-                        if packet["data"]["state"] == 'success':
-                            self.username[0] = packet["data"]["username"]
-                            self.userRoomsData = copy.deepcopy(packet["data"]["userRooms"])
-                            self.login[0] = True
-                            # print(self.userRoomsData)
-                        else:
-                            self.login[0] = False
-                            print('self.login[0]', False)
-                    if packet["response"] == 'message':
-                        roomid, log = packet["data"]["roomid"], packet["data"]["log"]
-                        self.syncLog(roomid, log)
-                elif "request" in packet:
-                    if packet["request"] == "connect":
-                        for con in packet["data"]["connect"]:
-                            newConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                            print(con)
-                            newConn.connect((con["ip"], con["port"]))
-                            sentUsername = False
-                            t_end = time.time() + 2 # 2s response
-                            while sentUsername == False and time.time() < t_end:
-                                try:
-                                    # user require to connect
-                                    newPacket = {
-                                        "request": "connect",
-                                        "host": self.host,
-                                        "data":{
-                                            "username": self.username[0],
-                                            "roomid": con["roomid"]
-                                        }
-                                    }
-                                    newPacket = json.dumps(newPacket)
-                                    newConn.send(newPacket.encode(FORMAT))
-                                    sentUsername = True
-                                except:
-                                    pass
-                            if sentUsername:
-                                # client connect to client hold socket
-                                self.online[con["roomid"]] = newConn
-                                print('sent username success', self.online)
-                                thread = ThreadWithReturnValue(target=self.listener, args=(newConn, (con["ip"], con["port"])))
-                                thread.start()
-                            else:
-                                print('can not connect peer2peer')
+            if "file" in packet:
+                #ID:sender:filename
+                print(packet)
+                sender_file=packet["roomID"]+":"+packet["author"][0]+":"+packet["file"]
+                cur_idx=-1
+                print(sender_file, self.author)
+                if sender_file in self.author:
+                    index = len(self.author) - 1 - self.author[::-1].index(sender_file)
+                    if(self.state_file[index]=="Finished"):
+                        self.author.append(sender_file)
+                        self.file.append(packet["data"])
+                        self.state_file.append(packet["state"])
+                        cur_idx=len(self.file)-1
+                    else:
+                        self.file[index]=self.file[index]+packet["data"]
+                        self.state_file[index]=packet["state"]
+                        cur_idx=index
+                else:
+                    self.author.append(sender_file)
+                    self.file.append(packet["data"])
+                    self.state_file.append(packet["state"])
+                    cur_idx=0
+                if(packet["state"]=="Finished"):
+                    print(self.file[cur_idx])
+                    print("End of file")
+                    pass
             else:
-                # listen user require to connect
-                if "request" in packet:
-                    if packet["request"] == "connect":
-                        # client listen to client hold socket
-                        self.online[packet["data"]["roomid"]] = conn
-                        print('self online', self.online)
-                        print(packet["data"]["roomid"], conn)
-                        print('self.userRoomsData', self.userRoomsData)
-                    if packet["request"] == "message":
-                        print('step 2')
-                        print('userRoomsData', self.userRoomsData)
-                        r = self.getRoomById(packet["data"]["roomid"])
-                        print(r)
-                        print(r["log"])
-                        print(packet["data"]["log"])
-                        r["log"].append(packet["data"]["log"])
+                if packet["host"][0] == SERVER["IP"] and packet["host"][1] ==  SERVER["PORT"]:
+                    if "response" in packet:
+                        if packet["response"] == 'signin':
+                            if packet["data"]["state"] == 'success':
+                                self.username[0] = packet["data"]["username"]
+                                self.userRoomsData = copy.deepcopy(packet["data"]["userRooms"])
+                                self.login[0] = True
+                                # print(self.userRoomsData)
+                            else:
+                                self.login[0] = False
+                                print('self.login[0]', False)
+                        if packet["response"] == 'message':
+                            roomid, log = packet["data"]["roomid"], packet["data"]["log"]
+                            self.syncLog(roomid, log)
+                    elif "request" in packet:
+                        if packet["request"] == "connect":
+                            for con in packet["data"]["connect"]:
+                                newConn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                                print(con)
+                                newConn.connect((con["ip"], con["port"]))
+                                sentUsername = False
+                                t_end = time.time() + 2 # 2s response
+                                while sentUsername == False and time.time() < t_end:
+                                    try:
+                                        # user require to connect
+                                        newPacket = {
+                                            "request": "connect",
+                                            "host": self.host,
+                                            "data":{
+                                                "username": self.username[0],
+                                                "roomid": con["roomid"]
+                                            }
+                                        }
+                                        newPacket = json.dumps(newPacket)
+                                        newConn.send(newPacket.encode(FORMAT))
+                                        sentUsername = True
+                                    except:
+                                        pass
+                                if sentUsername:
+                                    # client connect to client hold socket
+                                    self.online[con["roomid"]] = newConn
+                                    print('sent username success', self.online)
+                                    thread = ThreadWithReturnValue(target=self.listener, args=(newConn, (con["ip"], con["port"])))
+                                    thread.start()
+                                else:
+                                    print('can not connect peer2peer')
+                else:
+                    # listen user require to connect
+                    if "request" in packet:
+                        if packet["request"] == "connect":
+                            # client listen to client hold socket
+                            self.online[packet["data"]["roomid"]] = conn
+                            print('self online', self.online)
+                            print(packet["data"]["roomid"], conn)
+                            print('self.userRoomsData', self.userRoomsData)
+                        if packet["request"] == "message":
+                            print('step 2')
+                            print('userRoomsData', self.userRoomsData)
+                            r = self.getRoomById(packet["data"]["roomid"])
+                            print(r)
+                            print(r["log"])
+                            print(packet["data"]["log"])
+                            r["log"].append(packet["data"]["log"])
 
         # except:
         #     return
@@ -199,4 +225,37 @@ class User:
         while is_login == False and time.time() < t_end:
             is_login = self.get_login_status()
         return is_login
+
+    def send_file(self, fileMessage):
+        file_name = fileMessage.filename
+        # path= path + file_name
+        # file_read = open(path,"r")
+        room = self.getRoomById(self.currentRoomId[0])
+        
+        # file_read = fileMessage.stream
+        upload = fileMessage.read(500).decode('latin')
+        # upload=file_read.read(500)
+        while upload :
+            mess = {}
+            mess["file"]=file_name
+            mess["author"]=self.username[0]
+            mess["roomID"]= self.currentRoomId[0]
+            mess["data"]=upload
+            # upload=file_read.read(500)
+            upload = fileMessage.read(500).decode('latin')
+            if(upload==""):
+                mess["state"]="Finished"
+            else:
+                mess["state"]="NOT YET"
+            print(mess)
+            mess = json.dumps(mess)
+            # print(mess)
+            if room["amount"] > 2:
+                print("send to server")
+                self.sender(mess, [self.server])
+            else:
+                if self.currentRoomId[0] in self.online:
+                    self.online[self.currentRoomId[0]].send(mess.encode(FORMAT))
+            print('----')
+        # file_read.close()
 Client = User()
