@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/signup.css">
+    <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=bPPzVULmhQH0W78apgU6WN01f3osFiEpYeArEpa8RpGqiC4p4tjKwyMb_oZZs0PnzSlMcLAgeY0K_nb8pEgGOvX370Rx_mabFwfG2BYw3Um0XnLol08MGomk3semy3iqXZ1WrNfx4gjtenLZOPDHQt51PqHSKRYT0qYdiRC_dNpLygN106j8XXG2DdYUZ1wxgDUH6efxjLlr4o-rrpGm-YrhUtUh51LMFumUr2ZTEYnKO0AeLtwzZDhM35jheHgHUUR3nyEn-c5_Ki1eRcUbOHe3vwAWu6T_DzN3zfYQy8YOHcZqUgNzLNyS_CnYt7G-dXBfra-sNBORYNcp_aYOjMSABVPrbkgOOY1lp_Ze2YA" charset="UTF-8"></script><script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <form method = 'post' class = 'form_signup' action="" >
+            <div class="container">
+                <h1 style="text-align: center;">Đăng Ký</h1>
+                <p style="text-align: center;">Xin hãy nhập biểu mẫu bên dưới để đăng ký.</p>
+                <hr>
+                <label for="fullname"><b>Fullname</b></label>
+                <input type="text" id="name" placeholder="Your fullname" name="name" required>
+
+                <label for="username"><b>Username</b></label>
+                <input style="margin-bottom: 5px;" type="text" id="username" placeholder="Your username" name="username" required>
+                {% if state %}
+                    <p style="color: red;"class="signup_failure" for="username">Username is already existed! Please try the other</p>
+                {% endif %}
+                                
+                <label for="psw"><b>Password</b></label>
+                <input type="password" id="password" placeholder="Your password" name="password" required>
+                <label for="psw"><b>Gender</b></label>
+                <input style="margin-left: 150px" type="radio" name="gender" value="male"> Male
+                <input style="margin-left: 290px" type="radio" name="gender" value="female"> Female
+
+                <!-- <label>
+                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Nhớ Đăng Nhập
+                </label> -->
+                <div class="clearfix">
+                    <button type="submit" class="signupbtn">Sign Up</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

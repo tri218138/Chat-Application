@@ -1,0 +1,73 @@
+<div class="card-body msg_card_body" id="boxChat" data-mdb-perfect-scrollbar="true" style="position: relative; overflow-y: auto; height: 80vh;">
+    {% if logs|length > 0 %}
+    {% for lg in logs %}
+    {% if lg["username"] != usernames %}
+    <!-- <div class="d-flex justify-content-start mb-4"> -->
+    {% if lg["content"] != "file" %}
+    <div class="d-flex justify-content-start mb-4" >
+
+        <div class="img_cont_msg">
+            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt=""
+                class="rounded-circle user_img_msg">
+        </div>
+        <div class="msg_container">
+            <span class="msg_name">{{lg["username"]}}</span>
+            {{lg["content"]}}
+            <span class="msg_time">{{lg["time"]}}</span>
+        </div>
+    </div>
+    {% else %}
+    {% if lg["content"] == "file" and lg["file"]!="" %}
+    <div class="d-flex justify-content-start mb-4">
+        <div class="img_cont_msg">
+            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt=""
+                class="rounded-circle user_img_msg">
+        </div>
+        <div class="msg_container">
+            <span class="msg_name">{{lg["username"]}}</span>
+            <i style="font-weight: 600;" class="fa-regular fa-file-circle-check"></i>
+            <span class="msg_time">{{lg["file"]}}</span>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    <!-- </div> -->
+    {% else %}
+    <!-- <div class="d-flex justify-content-end mb-4"> -->
+    {% if lg["content"] != "file" %}
+    <div class="d-flex justify-content-end mb-4">
+        <div class="msg_container_send">
+            <span class="msg_name_send">{{lg["username"]}}</span>
+            {{lg["content"]}}
+            <span class="msg_time_send">{{lg["time"]}}</span>
+        </div>
+        <div class="img_cont_msg">
+            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt=""
+                class="rounded-circle user_img_msg">
+        </div>
+    </div>
+    {% else %}
+    {% if lg["content"] == "file" and lg["file"]!="" %}
+    <div class="d-flex justify-content-end mb-4">
+        <div class="msg_container_send">
+            <span class="msg_name_send">{{lg["username"]}}</span>
+            <i style="font-weight: 600;" class="fa-regular fa-file-circle-check"></i>
+            <span class="msg_time_send">{{lg["file"]}}</span>
+        </div>
+        <div class="img_cont_msg">
+            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt=""
+                class="rounded-circle user_img_msg">
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    <!-- </div> -->
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    const messages = document.getElementById('boxChat');
+    messages.scrollTop = messages.scrollHeight;
+</script>

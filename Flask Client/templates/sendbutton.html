@@ -1,0 +1,34 @@
+<div class="card-footer">
+    <form id="textArea" method="post" action="/" enctype=multipart/form-data>
+        <div class="input-group">
+            <div class="input-group-append">
+                <label for="formFile" style="margin: 0">
+                    <input class="" type="file" id="formFile" name="file" style="display: none;">
+                    <span style="height: 100%;"  class="input-group-text attach_btn">
+                        <i for="formFile" class="fas fa-paperclip"></i>
+                    </span>
+                </label>
+            </div>
+            <input type="hidden" name="send">
+            <textarea id="textarea" name="message" class="form-control type_msg" placeholder="Type your message..."></textarea>
+            <div class="input-group-append">
+                <label for="sendbtn" style="margin: 0">
+                    <input style="display: none;" id="sendbtn" type="submit" class="btn btn-info btn-rounded float-end" value="Gửi">
+                    <span style="height: 100%;" class="input-group-text send_btn">
+                        <i class="fas fa-location-arrow"></i>
+                    </span>
+                </label>
+                
+            </div>
+        </div>
+    </form>
+</div>
+<!-- <form id="textArea" method="post" action="/" enctype=multipart/form-data>
+    <input type="hidden" name="send">
+    <div class="form-outline">
+        <textarea class="form-control" id="textarea" rows="4" name="message"></textarea>
+        
+    </div>
+    <input class="form-control" type="file" id="formFile" name="file">
+    <input type="submit" class="btn btn-info btn-rounded float-end" value="Send">
+</form> -->

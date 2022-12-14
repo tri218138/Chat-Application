@@ -1,0 +1,29 @@
+
+<form id="chatGroup" action="/" method="post">
+    <!-- <div style="height: 100vh;"> -->
+            <div id="roomChat">
+                <ul class="contacts">
+                    <span style="padding-left: 10px; color: aquamarine;"><b>Your group chat</b></span>
+                    {% for gr in groups %}
+                    <li class="">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" alt="" class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <input hidden class="" type="radio" name="select_chatgroup" id='{{gr["id"]}}'
+                                    value='{{gr["id"]}}' onclick="javascript: submit()">
+                                <label style="cursor: pointer" class="" for='{{gr["id"]}}'>
+                                    <span>{{gr["name"]}}</span>
+                                    <p>{{gr["name"]}} is online</p>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+    <!-- </div> -->
+</form>

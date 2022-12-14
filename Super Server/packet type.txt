@@ -1,0 +1,23 @@
+{
+    "request": "",
+    "host": "",
+    "data": {}
+}
+
+{
+    "username": "",
+    "password": "",
+}
+
+{
+    "username": "",
+    "roomid": "",
+    "message": "",
+    "time": "",
+}
+
+{
+    "response": "",
+    "host":"",
+    "data":{},
+}
